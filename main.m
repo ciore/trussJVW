@@ -39,11 +39,8 @@ displayForce(react,force)
 delta=computeMVirtualWork(model,force);
 plotDelta(model,delta)
 displayDelta(delta)
-mass=sum(model.A.*model.length.*model.rho);
+mass=sum(model.A.*model.L.*model.rho);
 deltamax=max(sqrt(sum(delta.^2,2)));
-
-
-
 
 
 
@@ -108,12 +105,13 @@ end
 function model=tie_def
   model.node=[0 0; 1 0]; %size nx2
   model.member=[1 2]; %size mx2
-  model.length=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2);  %size mx1
   model.react=logical([1 1; 0 1]); %size nx2
   model.load=[0 0; 1e4 0]; %size nx2
   model.virt=logical([0 0; 1 0]); %size nx2
-  model.E=[72e9]*ones(size(model.member,1),1); %size mx1
-  model.rho=[2755]*ones(size(model.member,1),1); %size mx1
+  model.L=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2);  %size mx1
+  model.E=[2.1e11]*ones(size(model.member,1),1); %size mx1
+  model.nui=[0.285]*ones(size(model.member,1),1); %size mx1;
+  model.rho=[7800]*ones(size(model.member,1),1); %size mx1
   model.A=[0.01^2*pi/4];  %size mx2
 end
 
@@ -121,12 +119,13 @@ end
 function model=truss_def
   model.node=[0 0; 1 0; 0.25 -0.05; 0.5 -0.05; 0.75 -0.05; 0.25 0; 0.5 0; 0.75 0]; %size nx2
   model.member=[1 3; 3 4; 4 5; 5 2; 1 6; 6 7; 7 8; 8 2; 3 6; 3 7; 7 4; 7 5; 5 8]; %size mx2
-  model.length=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2); %size mx1
   model.react=logical([1 1; 0 1; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0]); %size nx2
   model.load=[0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 -1e4; 0 0]; %size nx2
   model.virt=logical([0 0; 1 0; 1 1; 1 1; 1 1; 1 1; 1 1; 1 1]); %size nx2
-  model.E=[72e9]*ones(size(model.member,1),1); %size mx1
-  model.rho=[2755]*ones(size(model.member,1),1); %size mx1
+  model.L=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2); %size mx1
+  model.E=[2.1e11]*ones(size(model.member,1),1); %size mx1
+  model.nu=[0.285]*ones(size(model.member,1),1); %size mx1;
+  model.rho=[7800]*ones(size(model.member,1),1); %size mx1
   model.A=[0.01^2*pi/4]*ones(size(model.member,1),1); %size mx1
 end
 
@@ -136,11 +135,12 @@ end
 %   model.member=[1 3; 3 4; 4 5; 5 2; 1 6; 6 7; 7 8; 8 2; 3 6; 3 7; 7 4; 7 5; 5 8]; %size mx2
 %   model.node=[0 0; 1 0; 0.25 -0.05; 0.75 -0.05; 0.5 0]; %size nx2
 %   model.member=[1 3; 3 4; 4 2; 1 5; 5 2; 3 5; 5 4]; %size mx2
-%   model.length=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2); %size mx1
 %   model.react=logical([1 1; 0 1; 0 0; 0 0; 0 0; ]); %size nx2
 %   model.load=[0 0; 0 0; 0 0; 0 0; 0 -1e4]; %size nx2
 %   model.virt=logical([0 0; 1 0; 1 1; 1 1; 1 1]); %size nx2
-%   model.E=[72e9]*ones(size(model.member,1),1); %size mx1
-%   model.rho=[2755]*ones(size(model.member,1),1); %size mx1
+%   model.L=sqrt((model.node(model.member(:,2),2)-model.node(model.member(:,1),2)).^2+(model.node(model.member(:,2),1)-model.node(model.member(:,1),1)).^2); %size mx1
+%   model.E=[2.1e11]*ones(size(model.member,1),1); %size mx1
+%   model.nu=[0.285]*ones(size(model.member,1),1); %size mx1;
+%   model.rho=[7800]*ones(size(model.member,1),1); %size mx1
 %   model.A=[0.01^2*pi/4]*ones(size(model.member,1),1); %size mx1
 % end
